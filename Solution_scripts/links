@@ -1,10 +1,10 @@
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-https://<<url>>/api/ServeApiDeltaExample?solution_type=duck_db&sql_query=(SELECT SaleKey, TotalIncludingTax, TotalDryItems, TaxAmount, CityKey, CustomerKey, BillToCustomerKey, SalespersonKey, DeliveryDateKey, Package, Profit FROM silver_fact_sale WHERE CityKey=41749 and SalespersonKey=40 and CustomerKey=397 and TaxAmount > 20)
+https://<<url>>/api/ServeApiDeltaExample?solution_type=direct&sql_query=(SELECT SaleKey, TotalIncludingTax, TotalDryItems, TaxAmount, CityKey, CustomerKey, BillToCustomerKey, SalespersonKey, DeliveryDateKey, Package, Profit FROM silver_fact_sale WHERE CityKey=41749 and SalespersonKey=40 and CustomerKey=397 and TaxAmount > 20)
 
-https://<<url>>/api/ServeApiDeltaExample?solution_type=duck_db&sql_query=(SELECT SaleKey, Description FROM silver_fact_sale WHERE CityKey=41749 and SalespersonKey=40 and CustomerKey=397 and TaxAmount > 20)
+https://<<url>>/api/ServeApiDeltaExample?solution_type=direct&sql_query=(SELECT SaleKey, Description FROM silver_fact_sale WHERE CityKey=41749 and SalespersonKey=40 and CustomerKey=397 and TaxAmount > 20)
 
-https://<<url>>/api/ServeApiDeltaExample?solution_type=duck_db&sql_query=(SELECT MAX(DeliveryDateKey), CityKey, AVG(TaxAmount) FROM silver_fact_sale GROUP BY CityKey HAVING COUNT(CityKey) > 10)
+https://<<url>>/api/ServeApiDeltaExample?solution_type=direct&sql_query=(SELECT MAX(DeliveryDateKey), CityKey, AVG(TaxAmount) FROM silver_fact_sale GROUP BY CityKey HAVING COUNT(CityKey) > 10)
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

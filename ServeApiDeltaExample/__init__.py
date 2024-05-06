@@ -20,18 +20,19 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     sql_query = req.params.get('sql_query')
 
     if solution_type == "direct":
-        storage_options={'tenant_id': '{TENANT_ID}', 'client_id': '{CLIENT_ID}', 'client_secret': '{CLIENT_SECRET}' }
+        storage_options={'tenant_id': TENANT_ID, 'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET }
         dt = DeltaTable("abfss://<<container name>>@<<storage account name>>.dfs.core.windows.net/<<delta folder name>>", storage_options=storage_options)
         parquet_read_options = {
             'coerce_int96_timestamp_unit': 'ms',  # Coerce int96 timestamps to a particular unit
         }
         pyarrow_dataset = dt.to_pyarrow_dataset(parquet_read_options=parquet_read_options)
         silver_fact_sale = duckdb.arrow(pyarrow_dataset)
+        results = duckdb.query(sql_query).fetchall()
 
         end_time = time.perf_counter()
         execution_time = end_time - start_time
 
-        return func.HttpResponse(str(execution_time) + "/n" + f"{duckdb.query(sql_query)}")
+        return func.HttpResponse(str(execution_time) + "/n" + f"{results}")
     else:
         if solution_type == "synapse_serverless":
             server="<<synapse serverless name>>-ondemand.sql.azuresynapse.net"
