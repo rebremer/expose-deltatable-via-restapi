@@ -11,6 +11,7 @@ import time
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
     start_time = time.perf_counter()
+    # Don't store credentials in code in PRD. Instead, use Managed Identity to authenticate to storage.
     TENANT_ID = "<<your tenant id>>"
     # Your Service Principal App ID
     CLIENT_ID = "<<your spn app id>>" # c1dfact-d-spn
