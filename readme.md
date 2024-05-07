@@ -1,6 +1,6 @@
 # Expose Delta Tables via REST APIs
 
-Git repo to test 3 architectures to expose delta tables via REST APIs. Architectures can be described as follows:
+Git repo to test 3 architectures to expose delta tables via REST APIs. See also my blogpost [here](https://rebremer.medium.com/how-to-expose-delta-tables-via-rest-apis-53b4dd7afa4e). Architectures can be described as follows:
 
 - Architecture A: Direct, Web App with DuckDB. In this architecture, APIs are directly connecting to the delta table and there is no layer in between. This implies that all data is analyzed in app service plan of the Azure Function. 
 - Architecture B: Indirect, Synapse, Databricks or Fabric layer. In this architecture, APIs are connecting to layer that fetches and analyses date from delta table. Data is not duplicated to layer in between
@@ -22,3 +22,9 @@ Steps to take:
 Test can then be run be triggering Azure Functions, see [links](Solution_scripts/links.txt).
 
 ![Architecture](Images/test_results.png)
+
+Takeaways are as follows:
+
+1. Architecture A cannot be deployed with SKU B1. In case it is SKU P1V3 is used, then results can be calculated within 15 seconds in case the column size is not to big. Notice that all data is analyzed in the Web App. If too much data is loaded (either via many rows, large columns and/or many concurrent requests), this architecture is hard to scale.
+2. Architecture B using Synapse Serverless consistently performs within 15–20 seconds. The compute is done on Synapse which can scale out
+3. Architecture C using Azure SQL performs best when indexes are created. For look up queries it responds in around 1 seconds, for query 3 that requires a full table scan, performance seems equal to the other solutions.
