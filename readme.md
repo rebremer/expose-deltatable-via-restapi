@@ -1,4 +1,4 @@
-# Expose Delta tables via REST APIs
+# Expose Delta Tables via REST APIs
 
 Git repo to test 3 architectures to expose delta tables via REST APIs. Architectures can be described as follows:
 
