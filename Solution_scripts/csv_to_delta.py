@@ -1,6 +1,13 @@
-## This code can be run on Spark to convert a CSV file to a Delta table
+from pyspark.sql.types import *
+from pyspark.sql.functions import col, year, month, dayofmonth, current_date, quarter
 
-file_location = "https://azuresynapsestorage.blob.core.windows.net/sampledata/WideWorldImportersDW/csv/full/WideWorldImportersDW/csv/full/fact_sale_1y_full/"
+# data can be downloaded from here: 
+#
+# https://azuresynapsestorage.blob.core.windows.net/sampledata/WideWorldImportersDW/csv/full/fact_sale_1y_full/ 
+#
+# it can't be read into spark directly by https. It shall be accessed via abffs from your own storage account or from local storage"
+
+file_location = "abfss://<<your container>>@<<your storage>>.dfs.core.windows.net/<<path to csv files>>"
 
 fact_sale_1y_full_schema = StructType([
     StructField('SaleKey', LongType(), True), 
@@ -29,7 +36,8 @@ fact_sale_1y_full_schema = StructType([
     StructField('Month', IntegerType(), True)])
 
 df = spark.read.format("csv").schema(fact_sale_1y_full_schema).option("header","true").load(file_location)
-df = df.withColumn('Year', year(current_date()))
-df = df.withColumn('Month', month(current_date()))
-df = df.withColumn('Day', dayofmonth(current_date()))
-df.repartition(2).write.mode("overwrite").format("parquet").partitionBy("Year","Month","Day").save("abfss://<<your container>>@<<your account>>.dfs.core.windows.net/<<your location>>")
+df = df.withColumn('Year', year(col("InvoiceDateKey")))
+df = df.withColumn('Quarter', quarter(col("InvoiceDateKey")))
+df = df.withColumn('Month', month(col("InvoiceDateKey")))
+
+df.repartition(2).write.mode("overwrite").format("delta").partitionBy("Year","Quarter").save("abfss://<<your container>>@<<your storage>>.dfs.core.windows.net/<<path to delta table>>")
